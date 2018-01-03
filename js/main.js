@@ -57,7 +57,7 @@ $(window).ready(function () {
       $('#user-profile').html(`
         <div class="card">
           <h2 class="card-header">
-            ${user.name}
+            <a href="${user.html_url}">${user.name}</a>
           </h2>
           <div class="card-body">
             <img style="width:100%" src="${user.avatar_url}">
