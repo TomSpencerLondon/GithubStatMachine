@@ -16,7 +16,7 @@
   <body>
 
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-      <a class="navbar-brand" href="#">David Halewood</a>
+      <a class="navbar-brand" href="#">Github Activity</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -31,19 +31,36 @@
     <main role="main" class="container">
       <div class="container">
         <div class="row">
-          <div class="col-md-6">
-            <form class="form-inline my-2 my-lg-0">
+          <div class="col-md-12 text-center">
+            <p>Add a user to see their average commits over the year compared with over the Winter Holiday season.</p>
+            <form class="form my-2 my-lg-0">
               <input id="user" class="form-control mr-sm-2" type="text" placeholder="Github Username" aria-label="Search">
-              <button id="search-user" class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+              <button id="search-user" class="btn btn-outline-success" type="submit">Submit</button>
             </form>
-            <div id="user-name"></div>
           </div>
         </div>
-        <br><br>
-        <div id="commit-data"></div>
-        <br><br>
-        <div id="activity-data"></div>
+        <br>
 
+        <div class="row">
+          <!-- This is where the user profile appears -->
+          <div class="col-md-4">
+            <div id="user-profile">
+            </div>
+          </div>
+
+          <!-- This is where the average activity appears -->
+          <div class="col-md-4">
+            <div id="activity-data">
+            </div>
+          </div>
+
+          <!-- This is where the average commits appear -->
+          <div class="col-md-4">
+            <div id="commit-data">
+            </div>
+          </div>
+
+        </div>
       </div>
 
     </main>
