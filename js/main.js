@@ -1,6 +1,7 @@
 $(window).ready(function (){
   let githubAccess = new GithubAccess
   let commitCalculator = new CommitCalculator
+  let activityCalculator = new ActivityCalculator
   let user = ''
 
   $('#search-user').on('click', function (e) {
@@ -29,7 +30,7 @@ $(window).ready(function (){
       data: githubAccess.data
     }).done(function(data){
       commitCalculator.addRepoCommits(data);
-      displayData();
+      displayCommitData();
     });
   };
 
@@ -39,10 +40,8 @@ $(window).ready(function (){
     data: githubAccess.data
     }).done(function(data){
       $.each(data, function(index, weeklyActivity){
-        let date = weeklyActivity[0]
-        let additions = weeklyActivity[1]
-        let deletions = weeklyActivity[2]
-        console.log(date, additions, deletions)
+        activityCalculator.addRepoActivity(weeklyActivity);
+        displayActivityData()
       });
     });
   };
@@ -55,12 +54,15 @@ $(window).ready(function (){
     `)
   };
 
-  function displayData() {
-    $('#commit-data').html(`
+  function displayCommitData() {
+    $('#activity-data').html(`
       <div class='row'>
         <div class='col-md-6'>
           <div id='data-card' class='card'>
             <div class='card-header'>
+              <h1>Commits</h1>
+            </div>
+            <div class='card-body'>
               Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span>
               Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span>
             </div>
@@ -70,5 +72,22 @@ $(window).ready(function (){
     `)
   };
 
+  function displayActivityData() {
+    $('#commit-data').html(`
+      <div class='row'>
+        <div class='col-md-6'>
+          <div id='data-card' class='card'>
+            <div class='card-header'>
+              <h1>Activity</h1>
+            </div>
+            <div class='card-body'>
+              Average Additions <span class='badge badge-primary badge-pill'>${activityCalculator.returnAdditionsAverage()}</span>
+              Average Deletions <span class='badge badge-primary badge-pill'>${activityCalculator.returnDeletionsAverage()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `)
+  };
 });
 
