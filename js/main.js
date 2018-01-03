@@ -2,40 +2,58 @@ $(window).ready(function (){
   let githubAccess = new GithubAccess
   let commitCalculator = new CommitCalculator
   let user = ''
-  let repos = []
 
   $('#search-user').on('click', function (e) {
     user = $('#user').val()
-
-    $.ajax({
-      url: 'https://api.github.com/users/'+user+"/repos?per_page=100",
-      data: githubAccess.data
-    })
-    .done(function(repos){
-      $.each(repos, function(index, repo){
-        repos.push(repo)
-      });
-    });
-    $('#commit-data').html(`
-      <div class="row">
-        <div class="col-md-6">
-          <button id="calculate-commits" class="btn btn-outline-success my-2 my-sm-0" type="submit">Calculate Commits</button>
-        </div>
-      </div>
-    `)
+    getRepoStats();
     $('#user').val('')
     e.preventDefault()
   });
 
-  $('calculate-commits').on('click', function () {
-    $.each(repos, function(index, repo) {
-      $.ajax({
-        url: 'https://api.github.com/repos/'+user+"/"+repo+"/stats/participation",
-        data: githubAccess.data
-      })
-      .done(function(data){
-        commitCalculator.addRepoCommits(data);
+  function getRepoStats() {
+    $.ajax({
+      url: 'https://api.github.com/users/'+user+"/repos?per_page=100",
+      data: githubAccess.data
+    }).done(function(repos){
+      displayUser();
+      $.each(repos, function(index, repo) {
+        getCommitStats(repo)
       });
     });
-  });
+  }
+
+  function getCommitStats(repo) {
+    $.ajax({
+      url: 'https://api.github.com/repos/'+user+"/"+repo.name+"/stats/participation",
+      data: githubAccess.data
+    }).done(function(data){
+      commitCalculator.addRepoCommits(data);
+      displayData();
+    });
+  }
+
+  function displayUser() {
+    $('#user-name').html(`
+    <h5>
+      ${user}'s repositories have been added!
+    </h5>
+    `)
+  };
+
+  function displayData() {
+    $('#commit-data').html(`
+      <div class="row">
+        <div class="col-md-6">
+          <div id="data-card" class="card">
+            <div class="card-header">
+              Average Commits <span class="badge badge-primary badge-pill">${commitCalculator.returnAverageCommits()}</span>
+              Holiday Commits <span class="badge badge-primary badge-pill">${commitCalculator.returnHolidayCommits()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `)
+  };
+
 });
+
