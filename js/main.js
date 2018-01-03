@@ -14,12 +14,15 @@ $(window).ready(function (){
   function getRepoStats() {
     $.ajax({
       url: 'https://api.github.com/users/'+user+'/repos?per_page=100',
-      data: githubAccess.data
+      data: githubAccess.data,
+      error: function (_, _, thrownError) {
+        alert(thrownError);
+      }
     }).done(function(repos){
       displayUser();
       $.each(repos, function(index, repo) {
         getCommitStats(repo);
-        getActivityStats(repo);
+        getActivityStats(repo)
       });
     });
   }
@@ -60,11 +63,13 @@ $(window).ready(function (){
         <div class='col-md-6'>
           <div id='data-card' class='card'>
             <div class='card-header'>
-              <h1>Commits</h1>
+              <h2>Commits</h2>
             </div>
             <div class='card-body'>
-              Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span>
-              Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span>
+              <ul class='list-group'>
+                <li class='list-group-item'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span></li>
+                <li class='list-group-item'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -78,11 +83,38 @@ $(window).ready(function (){
         <div class='col-md-6'>
           <div id='data-card' class='card'>
             <div class='card-header'>
-              <h1>Activity</h1>
+              <h2>Activity</h2>
             </div>
             <div class='card-body'>
-              Average Additions <span class='badge badge-primary badge-pill'>${activityCalculator.returnAdditionsAverage()}</span>
-              Average Deletions <span class='badge badge-primary badge-pill'>${activityCalculator.returnDeletionsAverage()}</span>
+              <ul class='list-group'>
+                <li class='list-group-item'>
+                  Average Additions 
+                  <span class='badge badge-primary badge-pill'>
+                    ${activityCalculator.returnAdditionsAverage()}
+                  </span>
+                </li>
+                <li class='list-group-item'>
+                  Holiday Additions 
+                  <span class='badge badge-primary badge-pill'>
+                    ${activityCalculator.returnAdditionsHolidayAverage()}
+                  </span>
+                </li>
+              </ul>
+              <br>
+              <ul class='list-group'>
+                <li class='list-group-item'>
+                  Average Deletions 
+                  <span class='badge badge-primary badge-pill'>
+                    ${activityCalculator.returnDeletionsAverage()}
+                  </span>
+                </li>
+                <li class='list-group-item'>
+                  Holiday Deletions 
+                  <span class='badge badge-primary badge-pill'>
+                    ${activityCalculator.returnDeletionsHolidayAverage()}
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
