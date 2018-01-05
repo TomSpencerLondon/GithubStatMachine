@@ -75,8 +75,8 @@ $(window).ready(function () {
         </div>
         <div class='card-body'>
           <ul class='list-group'>
-            <li class='list-group-item'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span></li>
-            <li class='list-group-item'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span></li>
           </ul>
         </div>
       </div>
@@ -91,13 +91,13 @@ $(window).ready(function () {
         </div>
         <div class='card-body'>
           <ul class='list-group'>
-            <li class='list-group-item'>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>
               Average Additions 
               <span class='badge badge-primary badge-pill'>
                 ${activityCalculator.returnAdditionsAverage()}
               </span>
             </li>
-            <li class='list-group-item'>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>
               Holiday Additions 
               <span class='badge badge-primary badge-pill'>
                 ${activityCalculator.returnAdditionsHolidayAverage()}
@@ -106,13 +106,13 @@ $(window).ready(function () {
           </ul>
           <br>
           <ul class='list-group'>
-            <li class='list-group-item'>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>
               Average Deletions 
               <span class='badge badge-primary badge-pill'>
                 ${activityCalculator.returnDeletionsAverage()}
               </span>
             </li>
-            <li class='list-group-item'>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>
               Holiday Deletions 
               <span class='badge badge-primary badge-pill'>
                 ${activityCalculator.returnDeletionsHolidayAverage()}
