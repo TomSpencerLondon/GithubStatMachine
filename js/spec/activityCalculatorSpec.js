@@ -14,25 +14,35 @@ describe('ActivityCalculator', function () {
       weeks.push([date, additions, deletions])
     }
   }
-  
-  $.each(weeks, function(index, week) {
-    activityCalculator.addRepoActivity(week)
+  let repos = [{}]
+
+  it('Calculates the average activity for a given repo', function () {
+    expect(activityCalculator.repoActivity(weeks)).toEqual({
+      additions: 91.32075471698113,
+      deletions: -9.132075471698114,
+      holidayAdditions: 8,
+      holidayDeletions: -0.8
+    })
   });
 
-  it('Calculates the average additions for a given repo', function () {
-    expect(activityCalculator.returnAdditionsAverage()).toEqual(93)
+  it('Calculates the average total activity for a given user', function () {
+    let allActivity = []
+    allActivity.push(activityCalculator.repoActivity(weeks))
+    allActivity.push(activityCalculator.repoActivity(weeks))
+    expect(activityCalculator.userActivity(allActivity)).toEqual({
+      additions: 91,
+      deletions: -9,
+      holidayAdditions: 8,
+      holidayDeletions: -1
+    })
   });
 
-  it('Calculates the average deletions for a given repo', function () {
-    expect(activityCalculator.returnDeletionsAverage()).toEqual(-9)
-  });
+  // it('Calculates the average holiday deletions for a given repo', function () {
+  //   expect(activityCalculator.returnAdditionsHolidayAverage()).toEqual(10)
+  // });
 
-  it('Calculates the average holiday deletions for a given repo', function () {
-    expect(activityCalculator.returnAdditionsHolidayAverage()).toEqual(10)
-  });
-
-  it('Calculates the average holiday deletions for a given repo', function () {
-    expect(activityCalculator.returnDeletionsHolidayAverage()).toEqual(-1)
-  });
+  // it('Calculates the average holiday deletions for a given repo', function () {
+  //   expect(activityCalculator.returnDeletionsHolidayAverage()).toEqual(-1)
+  // });
 
 });
