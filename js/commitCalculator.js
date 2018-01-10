@@ -10,7 +10,7 @@
           sum += commitHistory.reduce((a, b) => a + b, 0);
         }
       })
-      return (sum/52/repos.length).toFixed(2)
+      return Math.round(sum/52/repos.length*100)/100
     }
 
     function returnHolidayCommits (data) {
@@ -24,7 +24,7 @@
           }
         })
       })
-      return (sum/2/repos.length).toFixed(2)
+      return Math.round(sum/2/repos.length*100)/100
     }
 
     function addRepoCommits (data, repos) {
