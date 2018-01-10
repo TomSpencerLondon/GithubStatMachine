@@ -32,8 +32,7 @@ $(window).ready(function () {
       url: 'https://api.github.com/repos/' + user + '/' + repo.name + '/stats/participation',
       data: githubAccess.data
     }).done(function (data) {
-      commitCalculator.addRepoCommits(data);
-      displayCommitData();
+      displayCommitData(data);
     });
   };
 
@@ -67,7 +66,7 @@ $(window).ready(function () {
     });
   };
 
-  function displayCommitData() {
+  function displayCommitData(data) {
     $('#activity-data').html(`
       <div id='data-card' class='card'>
         <div class='card-header'>
@@ -75,8 +74,8 @@ $(window).ready(function () {
         </div>
         <div class='card-body'>
           <ul class='list-group'>
-            <li class='list-group-item d-flex justify-content-between align-items-center'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span></li>
-            <li class='list-group-item d-flex justify-content-between align-items-center'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits(data)}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits(data)}</span></li>
           </ul>
         </div>
       </div>

@@ -1,14 +1,10 @@
 (function (exports) {
   exports.CommitCalculator = function () {
-    let repos = []
 
-    function addRepoCommits (data) {
-      const commitHistory = data.all
-      repos.push(commitHistory)
-    };
-
-    function returnAverageCommits () {
+    function returnAverageCommits (data) {
+      let repos = []
       let sum = 0
+      addRepoCommits(data, repos)
       $.each(repos, function (index, commitHistory) {
         if (commitHistory != undefined) {
           sum += commitHistory.reduce((a, b) => a + b, 0);
@@ -17,8 +13,10 @@
       return Math.round(sum/52/repos.length)
     }
 
-    function returnHolidayCommits () {
+    function returnHolidayCommits (data) {
+      let repos = []
       let sum = 0
+      addRepoCommits(data, repos)
       $.each(repos, function (index, commitHistory) {
         $.each(commitHistory, function (index, weeklyCommits) {
           if (index >= 50) {
@@ -29,8 +27,12 @@
       return Math.round(sum/2/repos.length)
     }
 
+    function addRepoCommits (data, repos) {
+      const commitHistory = data.all
+      repos.push(commitHistory)
+    };
+
     return {
-      addRepoCommits: addRepoCommits,
       returnAverageCommits: returnAverageCommits,
       returnHolidayCommits: returnHolidayCommits
     }
