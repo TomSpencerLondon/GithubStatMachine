@@ -1,43 +1,45 @@
 (function (exports) {
   exports.ActivityCalculator = function () {
     
-    let additionsSum = 0
-    let deletionsSum = 0
-    let holidayAdditionsSum = 0
-    let holidayDeletionsSum = 0
-    let weeks = 0
-    let holidayWeeks = 0
-
-    function addRepoActivity(week) {
-      let date = week[0]
-      let additions = week[1]
-      let deletions = week[2]
-      if (isHolidaySeason(date) === true) {
-        holidayAdditionsSum += additions
-        holidayDeletionsSum += deletions
-        holidayWeeks += 1
+    function repoActivity (data) {
+      let result = {
+        additions: 0,
+        deletions: 0,
+        holidayAdditions: 0,
+        holidayDeletions: 0
       }
-      additionsSum += additions
-      deletionsSum += deletions
-      weeks += 1
+      let weeks = 1
+      let holidayWeeks = 1
+      $.each(data, function (index, weeklyActivity) {
+        if (isHolidaySeason(weeklyActivity[0])) {
+          result.holidayAdditions += weeklyActivity[1]
+          result.holidayDeletions += weeklyActivity[2]
+          holidayWeeks++
+        }
+        result.additions += weeklyActivity[1]
+        result.deletions += weeklyActivity[2]
+        weeks++
+      })
+      calculateWeeklyAverage(result, weeks, holidayWeeks)
+      return result
+    };
+
+    function userActivity(allReposActivity) {
+      let result = calculateTotalActivity(allReposActivity)
+      result.additions = Math.round(result.additions/allReposActivity.length)
+      result.deletions = Math.round(result.deletions/allReposActivity.length)
+      result.holidayAdditions = Math.round(result.holidayAdditions/allReposActivity.length)
+      result.holidayDeletions = Math.round(result.holidayDeletions/allReposActivity.length)
+      return result
     }
 
-    function returnAdditionsAverage() {
-      return Math.round(additionsSum/weeks)
+    function calculateWeeklyAverage(result, weeks, holidayWeeks) {
+      result.additions = result.additions/weeks
+      result.deletions = result.deletions/weeks
+      result.holidayAdditions = result.holidayAdditions/holidayWeeks
+      result.holidayDeletions = result.holidayDeletions/holidayWeeks
     }
 
-    function returnDeletionsAverage() {
-      return Math.round(deletionsSum/weeks)
-    }
-
-    function returnAdditionsHolidayAverage() {
-      return Math.round(holidayAdditionsSum/holidayWeeks)
-    }
-
-    function returnDeletionsHolidayAverage() {
-      return Math.round(holidayDeletionsSum/holidayWeeks)
-    }
-      
     function isHolidaySeason(unix) {
       let date = new Date(unix*1000);
       let day = (date.getDate() < 10 ? '0' : '') + date.getDate();
@@ -49,12 +51,25 @@
       }
     }
 
+    function calculateTotalActivity(allReposActivity) {
+      let result = {
+        additions: 0,
+        deletions: 0,
+        holidayAdditions: 0,
+        holidayDeletions: 0
+      }
+      $.each(allReposActivity, function(index, eachRepoActivity){
+        result.additions += eachRepoActivity.additions
+        result.deletions += eachRepoActivity.deletions
+        result.holidayAdditions += eachRepoActivity.holidayAdditions
+        result.holidayDeletions += eachRepoActivity.holidayDeletions
+      })
+      return result
+    }
+
     return {
-      addRepoActivity: addRepoActivity,
-      returnAdditionsAverage: returnAdditionsAverage,
-      returnDeletionsAverage: returnDeletionsAverage,
-      returnAdditionsHolidayAverage: returnAdditionsHolidayAverage,
-      returnDeletionsHolidayAverage: returnDeletionsHolidayAverage
+      repoActivity: repoActivity,
+      userActivity: userActivity
     }
   };
 })(this);

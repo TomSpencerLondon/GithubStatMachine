@@ -19,10 +19,11 @@ $(window).ready(function () {
         alert(thrownError);
       }
     }).done(function (repos) {
+      let allReposActivity = []
       displayUser();
       $.each(repos, function (index, repo) {
         getCommitStats(repo);
-        getActivityStats(repo)
+        getActivityStats(repo, allReposActivity)
       });
     });
   }
@@ -32,20 +33,19 @@ $(window).ready(function () {
       url: 'https://api.github.com/repos/' + user + '/' + repo.name + '/stats/participation',
       data: githubAccess.data
     }).done(function (data) {
-      commitCalculator.addRepoCommits(data);
-      displayCommitData();
+
+      displayCommitData(data);
     });
   };
 
-  function getActivityStats(repo) {
+  function getActivityStats(repo, allReposActivity) {
     $.ajax({
       url: 'https://api.github.com/repos/' + user + '/' + repo.name + '/stats/code_frequency',
       data: githubAccess.data
     }).done(function (data) {
-      $.each(data, function (index, weeklyActivity) {
-        activityCalculator.addRepoActivity(weeklyActivity);
-        displayActivityData()
-      });
+      allReposActivity.push(activityCalculator.repoActivity(data))
+      let displayData = activityCalculator.userActivity(allReposActivity)
+      displayActivityData(displayData)
     });
   };
 
@@ -67,7 +67,7 @@ $(window).ready(function () {
     });
   };
 
-  function displayCommitData() {
+  function displayCommitData(data) {
     $('#activity-data').html(`
       <div id='data-card' class='card'>
         <div class='card-header'>
@@ -75,15 +75,15 @@ $(window).ready(function () {
         </div>
         <div class='card-body'>
           <ul class='list-group'>
-            <li class='list-group-item d-flex justify-content-between align-items-center'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits()}</span></li>
-            <li class='list-group-item d-flex justify-content-between align-items-center'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits()}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Average Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnAverageCommits(data)}</span></li>
+            <li class='list-group-item d-flex justify-content-between align-items-center'>Holiday Commits <span class='badge badge-primary badge-pill'>${commitCalculator.returnHolidayCommits(data)}</span></li>
           </ul>
         </div>
       </div>
     `)
   };
 
-  function displayActivityData() {
+  function displayActivityData(displayData) {
     $('#commit-data').html(`
       <div id='data-card' class='card'>
         <div class='card-header'>
@@ -94,13 +94,13 @@ $(window).ready(function () {
             <li class='list-group-item d-flex justify-content-between align-items-center'>
               Average Additions 
               <span class='badge badge-primary badge-pill'>
-                ${activityCalculator.returnAdditionsAverage()}
+                ${displayData.additions}
               </span>
             </li>
             <li class='list-group-item d-flex justify-content-between align-items-center'>
               Holiday Additions 
               <span class='badge badge-primary badge-pill'>
-                ${activityCalculator.returnAdditionsHolidayAverage()}
+                ${displayData.holidayAdditions}
               </span>
             </li>
           </ul>
@@ -109,13 +109,13 @@ $(window).ready(function () {
             <li class='list-group-item d-flex justify-content-between align-items-center'>
               Average Deletions 
               <span class='badge badge-primary badge-pill'>
-                ${activityCalculator.returnDeletionsAverage()}
+                ${displayData.deletions}
               </span>
             </li>
             <li class='list-group-item d-flex justify-content-between align-items-center'>
               Holiday Deletions 
               <span class='badge badge-primary badge-pill'>
-                ${activityCalculator.returnDeletionsHolidayAverage()}
+                ${displayData.holidayDeletions}
               </span>
             </li>
           </ul>
