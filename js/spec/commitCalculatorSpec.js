@@ -10,10 +10,10 @@ describe('CommitCalculator', function () {
     }
     
   it('Calculates the average of a given data set', function () {
-    expect(commitCalculator.returnAverageCommits(data)).toEqual(10)
+    expect(commitCalculator.returnAverageCommits(data)).toEqual(9.62)
   });
 
   it('Calculates the average holiday period of a given data set', function () {
-    expect(commitCalculator.returnHolidayCommits(data)).toEqual(5)
+    expect(commitCalculator.returnHolidayCommits(data)).toEqual(5.00)
   });
 });

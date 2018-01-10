@@ -33,7 +33,6 @@ $(window).ready(function () {
       url: 'https://api.github.com/repos/' + user + '/' + repo.name + '/stats/participation',
       data: githubAccess.data
     }).done(function (data) {
-
       displayCommitData(data);
     });
   };
