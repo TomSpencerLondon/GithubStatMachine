@@ -15,8 +15,9 @@ describe('ActivityCalculator', function () {
 
   it('Calculates the average total activity for a given user', function () {
     let allActivity = []
-    allActivity.push(activityCalculator.repoActivity(activityData))
-    allActivity.push(activityCalculator.repoActivity(activityData))
+    for (var i = 0; i < 50; i++) {
+      allActivity.push(activityCalculator.repoActivity(activityData))
+    } 
     expect(activityCalculator.userActivity(allActivity)).toEqual({
       additions: 91,
       deletions: -9,

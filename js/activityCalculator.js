@@ -10,17 +10,7 @@
       }
       let weeks = 1
       let holidayWeeks = 1
-      $.each(data, function (index, weeklyActivity) {
-        if (isHolidaySeason(weeklyActivity[0])) {
-          result.holidayAdditions += weeklyActivity[1]
-          result.holidayDeletions += weeklyActivity[2]
-          holidayWeeks++
-        }
-        result.additions += weeklyActivity[1]
-        result.deletions += weeklyActivity[2]
-        weeks++
-      })
-      calculateWeeklyAverage(result, weeks, holidayWeeks)
+      addSingleRepoActivity (data, weeks, holidayWeeks, result)
       return result
     };
 
@@ -33,11 +23,45 @@
       return result
     }
 
+    function addSingleRepoActivity (data, weeks, holidayWeeks, result) {
+      $.each(data, function (index, weeklyActivity) {
+        if (isHolidaySeason(weeklyActivity[0])) {
+          result.holidayAdditions += weeklyActivity[1]
+          result.holidayDeletions += weeklyActivity[2]
+          holidayWeeks++
+        }
+        result.additions += weeklyActivity[1]
+        result.deletions += weeklyActivity[2]
+        weeks++
+      })
+      calculateWeeklyAverage(result, weeks, holidayWeeks)
+    }
+
     function calculateWeeklyAverage(result, weeks, holidayWeeks) {
       result.additions = result.additions/weeks
       result.deletions = result.deletions/weeks
       result.holidayAdditions = result.holidayAdditions/holidayWeeks
       result.holidayDeletions = result.holidayDeletions/holidayWeeks
+    }
+
+    function calculateTotalActivity(allReposActivity) {
+      let result = {
+        additions: 0,
+        deletions: 0,
+        holidayAdditions: 0,
+        holidayDeletions: 0
+      }
+      addEachRepoActivity(result, allReposActivity)
+      return result
+    }
+
+    function addEachRepoActivity (result, allReposActivity) {
+      $.each(allReposActivity, function(index, eachRepoActivity){
+        result.additions += eachRepoActivity.additions
+        result.deletions += eachRepoActivity.deletions
+        result.holidayAdditions += eachRepoActivity.holidayAdditions
+        result.holidayDeletions += eachRepoActivity.holidayDeletions
+      })
     }
 
     function isHolidaySeason(unix) {
@@ -49,22 +73,6 @@
       } else {
         return false
       }
-    }
-
-    function calculateTotalActivity(allReposActivity) {
-      let result = {
-        additions: 0,
-        deletions: 0,
-        holidayAdditions: 0,
-        holidayDeletions: 0
-      }
-      $.each(allReposActivity, function(index, eachRepoActivity){
-        result.additions += eachRepoActivity.additions
-        result.deletions += eachRepoActivity.deletions
-        result.holidayAdditions += eachRepoActivity.holidayAdditions
-        result.holidayDeletions += eachRepoActivity.holidayDeletions
-      })
-      return result
     }
 
     return {
