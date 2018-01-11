@@ -28,6 +28,7 @@
     }
 
     function addRepoCommits (data, repos) {
+      console.log(data)
       const commitHistory = data.all
       repos.push(commitHistory)
     };
